@@ -3,10 +3,26 @@ from fastapi import FastAPI, Request, Body
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from dependencies.dependencies import PostServiceDependency
+from models import Post
 
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.get("/api/posts", response_model=list[Post])
+async def get_posts(post_service: PostServiceDependency):
+    posts = post_service.get_actual_posts()
+    return posts
+
 
 app.mount("/styles", StaticFiles(directory="static/css"))
 app.mount("/js", StaticFiles(directory="static/js"))
