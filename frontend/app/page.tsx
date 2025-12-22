@@ -1,10 +1,32 @@
+"use client";
+import { useEffect, useState } from "react";
+import type { Post } from "@/types/post";
 import { PostList } from "@/components/PostList";
-import { mockPosts } from "./mock/posts";
+import {Spinner} from "@heroui/spinner";
+
 
 export default function Home() {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/posts")
+      .then((res) => res.json())
+      .then((data: Post[]) => {
+        setPosts(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <Spinner />;
+
   return (
     <main className="max-w-3xl mx-auto px-4 py-6">
-      <PostList posts={mockPosts} />
+      <PostList posts={posts} />
     </main>
   );
 }
