@@ -20,8 +20,15 @@ app.add_middleware(
 
 @app.get("/api/posts", response_model=list[Post])
 async def get_posts(post_service: PostServiceDependency):
-    posts = post_service.get_actual_posts()
-    return posts
+    return post_service.get_actual_posts()
+
+
+@app.get("/api/post/{post_id}", response_model=Post)
+async def get_post(
+    post_service: PostServiceDependency,
+    post_id: str
+):
+    return post_service.get_post_by_id(post_id)
 
 
 app.mount("/styles", StaticFiles(directory="static/css"))
