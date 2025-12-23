@@ -33,11 +33,11 @@ export function PostCard({ post }: PostCardProps) {
   const html = converter.convert();
 
   return (
-    <Card className="mb-4">
+    <Card className="mb-4 p-3">
       {/* HEADER */}
       <CardHeader className="flex justify-between items-start gap-4">
         <div>
-          <Link href={`/view-post/${post.id}`}>
+          <Link href={`/posts/${post.id}`}>
             <h2 className="text-lg font-semibold text-default-700">{post.title}</h2>
           </Link>
           <p className="text-sm text-default-500">{formattedDate}</p>
@@ -63,7 +63,7 @@ export function PostCard({ post }: PostCardProps) {
 
         <Button
             size="sm"
-            className="bg-linear-to-tr from-rose-300 to-pink-400 shadow-lg tracking-widest px-8 inline-flex self-start my-4"
+            className="bg-linear-to-tr from-rose-300 to-pink-400 shadow-lg tracking-widest px-8 inline-flex self-start mt-4 mb-2"
             radius="full"
             onPress={() => setExpanded(!expanded)}
         >
