@@ -5,6 +5,9 @@ import { Link } from "@heroui/link";
 import { Trash2, Pen } from "lucide-react";
 import { useState } from "react";
 import type { Post } from "@/types/post";
+import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
+import 'react-quill/dist/quill.snow.css';
+
 
 interface PostCardProps {
   post: Post;
@@ -20,6 +23,14 @@ export function PostCard({ post }: PostCardProps) {
     hour: "2-digit",
     minute: "2-digit",
   });
+
+  const delta = JSON.parse(post.content);
+
+  const converter = new QuillDeltaToHtmlConverter(delta, {
+    inlineStyles: true,
+  });
+
+  const html = converter.convert();
 
   return (
     <Card className="mb-4">
@@ -44,13 +55,11 @@ export function PostCard({ post }: PostCardProps) {
 
       {/* BODY */}
       <CardBody>
-        <p
-          className={`text-default-700 whitespace-pre-line ${
+        <div className={`text-default-700 whitespace-pre-line ${
             expanded ? "" : "line-clamp-7"
           }`}
-        >
-          {post.content}
-        </p>
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
 
         <Button
             size="sm"
