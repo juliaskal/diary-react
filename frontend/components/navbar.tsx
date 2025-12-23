@@ -15,8 +15,8 @@ import clsx from "clsx";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
-import { SearchIcon } from "@/components/icons";
-import { Heart, Settings } from 'lucide-react';
+import { SearchIcon, DiaryIcon } from "@/components/icons";
+import { Settings } from 'lucide-react';
 
 
 export const Navbar = () => {
@@ -42,7 +42,7 @@ export const Navbar = () => {
         <NavbarBrand as="li" className="gap-3 max-w-fit">
 
           <NextLink className="flex justify-start items-center gap-1" href="/">
-            <Heart />
+            <DiaryIcon />
           </NextLink>
 
         </NavbarBrand>
