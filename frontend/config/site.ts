@@ -2,6 +2,7 @@ export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
   name: "Diary",
+  backendDomain: "http://127.0.0.1:8000",
   navItems: [
     {
       label: "home",
