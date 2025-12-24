@@ -1,6 +1,7 @@
 export interface Post {
   id: number;
-  title: string;
+  title: string | null;
   content: string;
   created_at: string;
+  folder: string | null;
 }
