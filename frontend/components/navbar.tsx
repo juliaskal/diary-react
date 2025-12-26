@@ -12,7 +12,6 @@ import { Button } from "@heroui/button";
 import { link as linkStyles } from "@heroui/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
-
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { SearchIcon, DiaryIcon } from "@/components/icons";
@@ -100,12 +99,14 @@ export const Navbar = () => {
       </NavbarMenu>
 
 
-      <Button
-        className="bg-linear-to-tr from-rose-300 to-pink-400 shadow-lg tracking-widest text-sm px-8"
-        radius="full"
-      >
-        new note
-      </Button>
+      <NextLink href={'/posts/new'}>
+        <Button
+          className="bg-linear-to-tr from-rose-300 to-pink-400 shadow-lg tracking-widest text-sm px-8"
+          radius="full"
+        >
+          new note
+        </Button>
+      </NextLink>
 
       <Settings />
 
