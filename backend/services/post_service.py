@@ -43,10 +43,12 @@ class PostService:
         else:
             created_at_datetime = datetime.now()
 
+        content = form_data.get("content")
+
         post_data = {
             "title": form_data.get("title"),
             "created_at": created_at_datetime,
-            "content": form_data.get("content"),
+            "content": content if content else {"ops": []},
             "folder": form_data.get("folder")
         }
 
