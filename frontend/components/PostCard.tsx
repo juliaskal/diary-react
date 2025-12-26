@@ -14,7 +14,7 @@ interface PostCardProps {
 }
 
 export function PostCard({ post }: PostCardProps) {
-  const [expanded, setExpanded] = useState(false); // состояние раскрытия
+  const [expanded, setExpanded] = useState(false);
 
   const formattedDate = new Date(post.created_at).toLocaleString("ru-RU", {
     day: "2-digit",
@@ -24,9 +24,7 @@ export function PostCard({ post }: PostCardProps) {
     minute: "2-digit",
   });
 
-  const delta = JSON.parse(post.content);
-
-  const converter = new QuillDeltaToHtmlConverter(delta, {
+  const converter = new QuillDeltaToHtmlConverter(post.content.ops ?? [], {
     inlineStyles: true,
   });
 
@@ -38,7 +36,7 @@ export function PostCard({ post }: PostCardProps) {
       <CardHeader className="flex justify-between items-start gap-4">
         <div>
           <Link href={`/posts/${post.id}`}>
-            <h2 className="text-lg font-semibold text-default-700">{post.title}</h2>
+            <h2 className="text-lg font-semibold text-default-700">{post.title ? post.title : ""}</h2>
           </Link>
           <p className="text-sm text-default-500">{formattedDate}</p>
         </div>

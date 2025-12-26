@@ -11,6 +11,8 @@ import Formatter from "./Formatter";
 import { FolderHeart } from 'lucide-react';
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
+import type { DeltaStatic } from 'quill';
+
 
 export const folders = [
   { label: "common", key: "common" },
@@ -27,10 +29,11 @@ export function PostForm({ post }: PostFormProps) {
   const [title, setTitle] = useState(post?.title ?? "");
   const [date, setDate] = useState<ZonedDateTime | null>(now(getLocalTimeZone()));
   const [folder, setFolder] = useState<string | null>(post?.folder ?? null);
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState<DeltaStatic | null>(null);
 
-  // Ссылка на Formatter, если нужен метод getContent
-  const formatterRef = useRef<{ getContent: () => string }>(null);
+  const formatterRef = useRef<{
+    getContent: () => DeltaStatic | null;
+  }>(null);
 
   const handleSubmit = async () => {
     // Если используем ref для Formatter
