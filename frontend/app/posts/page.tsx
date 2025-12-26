@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type { Post } from "@/types/post";
 import { PostList } from "@/components/PostList";
 import {Spinner} from "@heroui/spinner";
+import { siteConfig } from "@/config/site";
 
 
 export default function Posts() {
@@ -10,7 +11,7 @@ export default function Posts() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/posts")
+    fetch(`${siteConfig.backendDomain}/api/posts`)
       .then((res) => res.json())
       .then((data: Post[]) => {
         setPosts(data);
