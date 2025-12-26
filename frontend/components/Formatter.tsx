@@ -1,48 +1,56 @@
 'use client';
 
-import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
 import Editor from './Editor';
+import type { DeltaStatic } from 'quill';
 import type Quill from 'quill';
 
 interface FormatterProps {
-  onChange?: (value: string) => void; // внешний callback
+  onChange?: (value: DeltaStatic) => void;
 }
 
 export default forwardRef(function Formatter(
   { onChange }: FormatterProps,
-  ref: React.Ref<{ getContent: () => string }>
+  ref: React.Ref<{ getContent: () => DeltaStatic | null }>
 ) {
-  const [readOnly, setReadOnly] = useState(false);
-  const [defaultValue, setDefaultValue] = useState<any>(null);
+  const [readOnly] = useState(false);
+  const [defaultValue, setDefaultValue] = useState<DeltaStatic | null>(null);
+  const [content, setContent] = useState<DeltaStatic | null>(null);
 
   const quillRef = useRef<Quill | null>(null);
 
-  const [content, setContent] = useState<string>(""); // хранит текст
-
   useImperativeHandle(ref, () => ({
-    getContent: () => content, // внешний метод для получения текста
+    getContent: () => content,
   }));
 
-  // Delta загружаем ТОЛЬКО на клиенте
   useEffect(() => {
     (async () => {
       const Quill = (await import('quill')).default;
       const Delta = Quill.import('delta');
-
-      setDefaultValue(new Delta().insert('Enter text...'));
+      setDefaultValue(new Delta().insert(''));
     })();
   }, []);
 
   if (!defaultValue) return null;
 
   const handleTextChange = (_delta: any, _oldDelta: any, source: string) => {
-    const text = quillRef.current?.getText() ?? "";
-    setContent(text);
-    onChange?.(text); // отдаём наружу через проп
+    if (source !== 'user') return;
+
+    const delta = quillRef.current?.getContents();
+    if (!delta) return;
+
+    setContent(delta);
+    onChange?.(delta);
   };
 
   return (
-    <div className='w-3xl'>
+    <div className="w-3xl">
       <Editor
         ref={quillRef}
         readOnly={readOnly}
