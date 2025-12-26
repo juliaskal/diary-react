@@ -31,6 +31,14 @@ async def get_post(
     return post_service.get_post_by_id(post_id)
 
 
+@app.post("/api/new")
+async def new_post(
+    form_data: Annotated[dict, Body()],
+    post_service: PostServiceDependency
+) -> str:
+    return post_service.create_post(form_data)
+
+
 app.mount("/styles", StaticFiles(directory="static/css"))
 app.mount("/js", StaticFiles(directory="static/js"))
 app.mount("/images", StaticFiles(directory="static/images"))
