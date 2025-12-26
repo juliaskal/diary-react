@@ -10,6 +10,7 @@ import type { Post } from "@/types/post";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 import 'react-quill/dist/quill.snow.css';
 import { Spinner } from "@heroui/spinner";
+import { siteConfig } from "@/config/site";
 
 type ViewPostProps = { postId: string };
 
@@ -21,7 +22,7 @@ export function ViewPost({ postId }: ViewPostProps) {
     if (!postId) return;
 
     setLoading(true);
-    fetch(`http://127.0.0.1:8000/api/post/${postId}`)
+    fetch(`${siteConfig.backendDomain}/api/post/${postId}`)
       .then((res) => res.json())
       .then((data: Post) => {
         setPost(data);
@@ -37,17 +38,7 @@ export function ViewPost({ postId }: ViewPostProps) {
 
   if (!post) return <div>Запись не найдена</div>;
 
-  const formattedDate = new Date(post.created_at).toLocaleString("ru-RU", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-  const delta = JSON.parse(post.content);
-
-  const converter = new QuillDeltaToHtmlConverter(delta, {
+  const converter = new QuillDeltaToHtmlConverter(post.content.ops ?? [], {
     inlineStyles: true,
   });
 
@@ -61,8 +52,30 @@ export function ViewPost({ postId }: ViewPostProps) {
     <Card className="mb-4 p-3">
       {/* HEADER */}
       <CardHeader className="flex justify-between items-start gap-4">
-        <div>
-          <p className="text-sm text-default-500">{formattedDate}</p>
+
+        <div className="flex">
+
+          <div className="flex-none border-1 border-default-200/50 rounded-small text-center w-11 overflow-hidden">
+
+            <div className="text-tiny bg-default-100 py-0.5 text-default-500">
+              {new Date(post.created_at).toLocaleString("ru-RU", {month: "short"})}
+            </div>
+
+            <div className="flex items-center justify-center font-semibold text-medium h-6 text-default-500">
+              {new Date(post.created_at).toLocaleString("ru-RU", {day: "2-digit"})}
+            </div>
+
+          </div>
+
+          <div className="ms-4">
+            <p className="text-sm text-default-500">
+              {new Date(post.created_at).toLocaleString("ru-RU", {year: "numeric"})}
+            </p>
+            <p className="text-medium font-medium">
+              в {new Date(post.created_at).toLocaleString("ru-RU", {hour: "2-digit", minute: "2-digit"})}
+            </p>
+          </div>
+
         </div>
 
         <div className="flex gap-1">
