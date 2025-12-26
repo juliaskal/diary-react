@@ -7,6 +7,6 @@ class Post(FreezeModel):
     title: str | None = None
     created_at: datetime
     folder: str | None = None
-    content: str
+    content: dict
     is_archived: bool = False
     is_deleted: bool = False
