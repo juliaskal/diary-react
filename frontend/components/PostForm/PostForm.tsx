@@ -12,6 +12,7 @@ import { FolderHeart } from 'lucide-react';
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import type { DeltaStatic } from 'quill';
+import { useRouter } from "next/navigation";
 
 
 export const folders = [
@@ -26,6 +27,8 @@ interface PostFormProps {
 }
 
 export function PostForm({ post }: PostFormProps) {
+  const router = useRouter();
+
   const [title, setTitle] = useState(post?.title ?? "");
   const [date, setDate] = useState<ZonedDateTime | null>(now(getLocalTimeZone()));
   const [folder, setFolder] = useState<string | null>(post?.folder ?? null);
@@ -36,7 +39,6 @@ export function PostForm({ post }: PostFormProps) {
   }>(null);
 
   const handleSubmit = async () => {
-    // Если используем ref для Formatter
     const currentContent = formatterRef.current?.getContent() ?? content;
 
     const payload = {
@@ -60,7 +62,9 @@ export function PostForm({ post }: PostFormProps) {
         return;
       }
 
-      console.log("Пост сохранён");
+      const data = await res.json();
+      router.push(`/posts/${data.id}`);
+
     } catch (err) {
       console.error("Ошибка при отправке:", err);
     }
