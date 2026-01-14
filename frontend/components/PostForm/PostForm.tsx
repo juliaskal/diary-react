@@ -6,21 +6,13 @@ import 'react-quill/dist/quill.snow.css';
 import { Input } from "@heroui/input";
 import { DatePicker } from "@heroui/date-picker";
 import { now, getLocalTimeZone, ZonedDateTime } from "@internationalized/date";
-import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
 import Formatter from "./Formatter";
-import { FolderHeart } from 'lucide-react';
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import type { DeltaStatic } from 'quill';
 import { useRouter } from "next/navigation";
+import { FolderSelect } from "./FolderSelect";
 
-
-export const folders = [
-  { label: "common", key: "common" },
-  { label: "love", key: "love" },
-  { label: "pilon", key: "pilon" },
-  { label: "work", key: "work" },
-];
 
 interface PostFormProps {
   post: Post | null;
@@ -31,8 +23,8 @@ export function PostForm({ post }: PostFormProps) {
 
   const [title, setTitle] = useState(post?.title ?? "");
   const [date, setDate] = useState<ZonedDateTime | null>(now(getLocalTimeZone()));
-  const [folder, setFolder] = useState<string | null>(post?.folder ?? null);
-  const [content, setContent] = useState<DeltaStatic | null>(null);
+  const [folder, setFolder] = useState<string | null>(post?.folder?.id ?? null);
+  const [content, setContent] = useState<DeltaStatic | null>(post?.content ?? null);
 
   const formatterRef = useRef<{
     getContent: () => DeltaStatic | null;
@@ -92,18 +84,7 @@ export function PostForm({ post }: PostFormProps) {
         onChange={setDate}
       />
 
-      <Autocomplete
-        className="max-w-xs"
-        label="Папка"
-        placeholder="Поиск по папкам"
-        startContent={<FolderHeart className="text-default-700" />}
-        variant="bordered"
-        onSelectionChange={(key) => setFolder(key as string)}
-      >
-        {folders.map((f) => (
-          <AutocompleteItem key={f.key}>{f.label}</AutocompleteItem>
-        ))}
-      </Autocomplete>
+      <FolderSelect value={folder} onChange={setFolder}/>
 
       <Formatter ref={formatterRef} onChange={setContent} />
 
