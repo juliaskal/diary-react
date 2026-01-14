@@ -1,9 +1,10 @@
 import type { DeltaStatic } from 'quill';
+import type { Folder } from './folder';
 
 export interface Post {
-  id: number;
+  id: string;
   title: string | null;
   content: DeltaStatic;
   created_at: string;
-  folder: string | null;
+  folder: Folder;
 }
