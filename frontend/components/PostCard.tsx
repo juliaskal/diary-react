@@ -2,27 +2,22 @@
 import { Card, CardHeader, CardBody } from "@heroui/card";
 import { Button } from "@heroui/button";
 import { Link } from "@heroui/link";
-import { Trash2, Pen } from "lucide-react";
+import NextLink from "next/link";
+import { Pen } from "lucide-react";
 import { useState } from "react";
 import type { Post } from "@/types/post";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 import 'react-quill/dist/quill.snow.css';
-
+import { DeletePost } from "./postCard/DeletePost";
+import { PostHeaderInfo } from "./postCard/PostHeaderInfo";
 
 interface PostCardProps {
   post: Post;
+  onDelete: (postId: string) => void;
 }
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post, onDelete }: PostCardProps) {
   const [expanded, setExpanded] = useState(false);
-
-  const formattedDate = new Date(post.created_at).toLocaleString("ru-RU", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
 
   const converter = new QuillDeltaToHtmlConverter(post.content.ops ?? [], {
     inlineStyles: true,
@@ -36,19 +31,27 @@ export function PostCard({ post }: PostCardProps) {
       <CardHeader className="flex justify-between items-start gap-4">
         <div>
           <Link href={`/posts/${post.id}`}>
-            <h2 className="text-lg font-semibold text-default-700">{post.title ? post.title : ""}</h2>
+            <h2 className="text-lg font-semibold text-default-700 mb-2">{post.title ? post.title : ""}</h2>
           </Link>
-          <p className="text-sm text-default-500">{formattedDate}</p>
+
+          <PostHeaderInfo post={post} />
         </div>
 
         <div className="flex gap-1">
-          <Button isIconOnly size="sm" variant="light" color="danger">
-            <Trash2 className="w-4 h-4" />
-          </Button>
-          <Button isIconOnly size="sm" variant="light">
+
+          <DeletePost postId={post.id} onDeleted={() => onDelete(post.id)}/>
+
+          <Button as={NextLink}
+            href={`/posts/${post.id}/edit`}
+            isIconOnly
+            size="sm"
+            variant="light"
+          >
             <Pen className="w-4 h-4" />
           </Button>
+
         </div>
+
       </CardHeader>
 
       {/* BODY */}
