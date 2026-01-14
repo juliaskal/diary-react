@@ -1,9 +1,9 @@
 from typing import Annotated
 from fastapi import Depends
 from mongodb.generic_mongo_repository import GenericMongoRepository
-from mongodb.folder_mongo_repository import FolderMongoRepository
-from models import Post
+from models import Post, Folder
 from services.post_service import PostService
+from services.folder_service import FolderService
 
 
 def get_post_repository():
@@ -14,16 +14,18 @@ def get_post_repository():
     )
 
 
+PostRepositoryDependency = Annotated[GenericMongoRepository[Post], Depends(get_post_repository)]
+
+
 def get_folder_repository():
-    return FolderMongoRepository(
+    return GenericMongoRepository[Folder](
         connection_string='mongodb://localhost:27017/',
         database_name='diary',
         collection_name='folder'
     )
 
 
-PostRepository = Annotated[GenericMongoRepository[Post], Depends(get_post_repository)]
-FolderRepository = Annotated[FolderMongoRepository, Depends(get_folder_repository)]
+FolderRepositoryDependency = Annotated[GenericMongoRepository[Folder], Depends(get_folder_repository)]
 
 
 def get_post_service():
@@ -34,3 +36,12 @@ def get_post_service():
 
 
 PostServiceDependency = Annotated[PostService, Depends(get_post_service)]
+
+
+def get_folder_service():
+    return FolderService(
+        folder_repository=get_folder_repository()
+    )
+
+
+FolderServiceDependency = Annotated[FolderService, Depends(get_folder_service)]
