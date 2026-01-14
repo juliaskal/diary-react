@@ -5,16 +5,21 @@ import { Card, CardHeader, CardBody } from "@heroui/card";
 import { Button } from "@heroui/button";
 import Link from "next/link";
 import { title } from "@/components/primitives";
-import { Trash2, Pen } from "lucide-react";
+import { Pen } from "lucide-react";
 import type { Post } from "@/types/post";
+import { PostHeaderInfo } from "./postCard/PostHeaderInfo";
+import { DeletePost } from "./postCard/DeletePost";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 import 'react-quill/dist/quill.snow.css';
 import { Spinner } from "@heroui/spinner";
 import { siteConfig } from "@/config/site";
+import { useRouter } from "next/navigation";
 
 type ViewPostProps = { postId: string };
 
 export function ViewPost({ postId }: ViewPostProps) {
+  const router = useRouter();
+
   const [post, setPost] = useState<Post>();
   const [loading, setLoading] = useState(true);
 
@@ -33,6 +38,10 @@ export function ViewPost({ postId }: ViewPostProps) {
         setLoading(false);
       });
   }, [postId]);
+
+  function handlePostDelete() {
+    router.push(`/`);
+  }
 
   if (loading) return <Spinner />;
 
@@ -53,35 +62,11 @@ export function ViewPost({ postId }: ViewPostProps) {
       {/* HEADER */}
       <CardHeader className="flex justify-between items-start gap-4">
 
-        <div className="flex">
-
-          <div className="flex-none border-1 border-default-200/50 rounded-small text-center w-11 overflow-hidden">
-
-            <div className="text-tiny bg-default-100 py-0.5 text-default-500">
-              {new Date(post.created_at).toLocaleString("ru-RU", {month: "short"})}
-            </div>
-
-            <div className="flex items-center justify-center font-semibold text-medium h-6 text-default-500">
-              {new Date(post.created_at).toLocaleString("ru-RU", {day: "2-digit"})}
-            </div>
-
-          </div>
-
-          <div className="ms-4">
-            <p className="text-sm text-default-500">
-              {new Date(post.created_at).toLocaleString("ru-RU", {year: "numeric"})}
-            </p>
-            <p className="text-medium font-medium">
-              в {new Date(post.created_at).toLocaleString("ru-RU", {hour: "2-digit", minute: "2-digit"})}
-            </p>
-          </div>
-
-        </div>
+        <PostHeaderInfo post={post} />
 
         <div className="flex gap-1">
-          <Button isIconOnly size="sm" variant="light" color="danger">
-            <Trash2 className="w-4 h-4" />
-          </Button>
+          <DeletePost postId={post.id} onDeleted={handlePostDelete}/>
+
           <Button isIconOnly size="sm" variant="light">
             <Pen className="w-4 h-4" />
           </Button>
