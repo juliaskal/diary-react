@@ -4,7 +4,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from dependencies.dependencies import PostServiceDependency
+from dependencies import PostServiceDependency, FolderServiceDependency
 from models import Post
 
 
@@ -20,7 +20,7 @@ app.add_middleware(
 
 @app.get("/api/posts", response_model=list[Post])
 async def get_posts(post_service: PostServiceDependency):
-    return post_service.get_actual_posts()
+    return post_service.get_posts()
 
 
 @app.get("/api/post/{post_id}", response_model=Post)
@@ -35,8 +35,19 @@ async def get_post(
 async def new_post(
     form_data: Annotated[dict, Body()],
     post_service: PostServiceDependency
-) -> str:
-    return post_service.create_post(form_data)
+):
+    post_id = post_service.create_post(form_data)
+    return JSONResponse({"id": post_id})
+
+
+@app.delete("/api/posts/{post_id}")
+async def delete_post(post_id: str, post_service: PostServiceDependency):
+    return post_service.delete_post(post_id)
+
+
+@app.get("/api/folders")
+async def get_folders(folder_sercice: FolderServiceDependency):
+    return folder_sercice.get_list()
 
 
 app.mount("/styles", StaticFiles(directory="static/css"))
@@ -77,8 +88,8 @@ async def receive_creating_data(
     return JSONResponse({"location": f"/view-post/{post_id}"})
 
 
-@app.post("/delete-post", response_class=HTMLResponse)
-async def delete_post(request: Request, post_service: PostServiceDependency):
+@app.post("/delete-post")
+async def del_post(request: Request, post_service: PostServiceDependency):
     post_json = await request.json()
     post_service.delete_post(post_json.get("post_id"))
 
