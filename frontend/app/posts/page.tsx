@@ -23,11 +23,18 @@ export default function Posts() {
       });
   }, []);
 
-  if (loading) return <Spinner />;
+  function handlePostDelete(postId: string) {
+    setPosts((prev) => prev.filter((post) => post.id !== postId));
+  }
+
+  if (loading) return
+  <div className="flex justify-center items-center min-h-[40vh]">
+    <Spinner size="lg" />
+  </div>;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
-      <PostList posts={posts} />
+      <PostList posts={posts} onDelete={handlePostDelete} />
     </div>
   );
 }
