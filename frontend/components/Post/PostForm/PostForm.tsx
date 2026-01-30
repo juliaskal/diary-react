@@ -6,19 +6,18 @@ import 'react-quill/dist/quill.snow.css';
 import { Input } from "@heroui/input";
 import { DatePicker } from "@heroui/date-picker";
 import { now, getLocalTimeZone, ZonedDateTime } from "@internationalized/date";
-import Formatter from "./Formatter";
+import Formatter from "@/components/Post/PostForm/Formatter";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import type { DeltaStatic } from 'quill';
 import { useRouter } from "next/navigation";
-import { FolderSelect } from "./FolderSelect";
-
+import { FolderSelect } from "@/components/Post/PostForm/FolderSelect";
 
 interface PostFormProps {
   post: Post | null;
 }
 
-export function PostForm({ post }: PostFormProps) {
+function PostForm({ post }: PostFormProps) {
   const router = useRouter();
 
   const [title, setTitle] = useState(post?.title ?? "");
@@ -113,3 +112,5 @@ export function PostForm({ post }: PostFormProps) {
     </div>
   );
 }
+
+export { PostForm }

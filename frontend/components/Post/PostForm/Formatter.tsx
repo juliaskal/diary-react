@@ -7,7 +7,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from 'react';
-import Editor from './Editor';
+import Editor from '@/components/Post/PostForm/Editor';
 import type { DeltaStatic } from 'quill';
 import type Quill from 'quill';
 

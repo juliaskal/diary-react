@@ -5,7 +5,7 @@ interface PostHeaderInfoProps {
   post: Post;
 }
 
-export function PostHeaderInfo({ post }: PostHeaderInfoProps) {
+function PostHeaderInfo({ post }: PostHeaderInfoProps) {
 return (
     <div className="flex">
 
@@ -37,3 +37,5 @@ return (
 
     </div>
 )}
+
+export { PostHeaderInfo}

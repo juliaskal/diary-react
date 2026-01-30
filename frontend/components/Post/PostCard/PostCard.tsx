@@ -8,15 +8,15 @@ import { useState } from "react";
 import type { Post } from "@/types/post";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 import 'react-quill/dist/quill.snow.css';
-import { DeletePost } from "./postCard/DeletePost";
-import { PostHeaderInfo } from "./postCard/PostHeaderInfo";
+import { DeletePost } from "@/components/Post/PostCard/DeletePost";
+import { PostHeaderInfo } from "@/components/Post/PostCard/PostHeaderInfo";
 
 interface PostCardProps {
   post: Post;
   onDelete: (postId: string) => void;
 }
 
-export function PostCard({ post, onDelete }: PostCardProps) {
+function PostCard({ post, onDelete }: PostCardProps) {
   const [expanded, setExpanded] = useState(false);
 
   const converter = new QuillDeltaToHtmlConverter(post.content.ops ?? [], {
@@ -74,3 +74,5 @@ export function PostCard({ post, onDelete }: PostCardProps) {
     </Card>
   );
 }
+
+export { PostCard }

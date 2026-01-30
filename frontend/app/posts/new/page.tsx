@@ -1,6 +1,6 @@
 import { title } from "@/components/primitives";
 import clsx from "clsx";
-import { PostForm } from "@/components/postForm/PostForm";
+import { PostForm } from "@/components/Post/PostForm/PostForm";
 
 export default function AddPost() {
   return (

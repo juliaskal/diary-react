@@ -17,7 +17,7 @@ interface DeletePostProps {
   onDeleted: () => void;
 }
 
-export function DeletePost({ postId, onDeleted  }: DeletePostProps) {
+function DeletePost({ postId, onDeleted  }: DeletePostProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   async function handleDelete() {
@@ -82,3 +82,5 @@ export function DeletePost({ postId, onDeleted  }: DeletePostProps) {
     </>
   );
 }
+
+export { DeletePost }

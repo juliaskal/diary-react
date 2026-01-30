@@ -7,8 +7,8 @@ import Link from "next/link";
 import { title } from "@/components/primitives";
 import { Pen } from "lucide-react";
 import type { Post } from "@/types/post";
-import { PostHeaderInfo } from "./postCard/PostHeaderInfo";
-import { DeletePost } from "./postCard/DeletePost";
+import { PostHeaderInfo } from "@/components/Post/PostCard/PostHeaderInfo";
+import { DeletePost } from "@/components/Post/PostCard/DeletePost";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 import 'react-quill/dist/quill.snow.css';
 import { Spinner } from "@heroui/spinner";
@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 
 type ViewPostProps = { postId: string };
 
-export function ViewPost({ postId }: ViewPostProps) {
+function ViewPost({ postId }: ViewPostProps) {
   const router = useRouter();
 
   const [post, setPost] = useState<Post>();
@@ -94,3 +94,5 @@ export function ViewPost({ postId }: ViewPostProps) {
     </div>
   );
 }
+
+export { ViewPost }
