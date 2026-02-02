@@ -1,4 +1,4 @@
-import { ViewPost } from "@/components/ViewPost";
+import { ViewPost } from "@/components/Post/ViewPost";
 
 type Props = {
   params: Promise<{ id: string }>;

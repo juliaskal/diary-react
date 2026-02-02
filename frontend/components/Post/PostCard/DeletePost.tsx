@@ -17,12 +17,12 @@ interface DeletePostProps {
   onDeleted: () => void;
 }
 
-export function DeletePost({ postId, onDeleted  }: DeletePostProps) {
+function DeletePost({ postId, onDeleted  }: DeletePostProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   async function handleDelete() {
     try {
-      await fetch(`${siteConfig.backendDomain}/api/posts/${postId}`, {
+      await fetch(`${siteConfig.backendDomain}/api/post/${postId}`, {
         method: "DELETE",
       });
 
@@ -35,7 +35,6 @@ export function DeletePost({ postId, onDeleted  }: DeletePostProps) {
 
   return (
     <>
-      {/* КНОПКА УДАЛЕНИЯ */}
       <Button
         isIconOnly
         size="sm"
@@ -46,7 +45,6 @@ export function DeletePost({ postId, onDeleted  }: DeletePostProps) {
         <Trash2 className="w-4 h-4" />
       </Button>
 
-      {/* МОДАЛЬНОЕ ОКНО */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalContent>
           <ModalHeader>Удалить запись?</ModalHeader>
@@ -82,3 +80,5 @@ export function DeletePost({ postId, onDeleted  }: DeletePostProps) {
     </>
   );
 }
+
+export { DeletePost }

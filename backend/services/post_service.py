@@ -20,15 +20,13 @@ class PostService:
         else:
             created_at_datetime = datetime.now()
 
-        content = form_data.get("content")
-
-        folder_id = form_data.get("folder")
-        folder = self.folder_repository.get(id=folder_id)
+        folder = self.folder_repository.find(
+            id=form_data.get("folder"))
 
         post_data = {
             "title": form_data.get("title"),
             "created_at": created_at_datetime,
-            "content": content if content else {"ops": []},
+            "content_html": form_data.get("content_html"),
             "folder": folder
         }
 
@@ -37,14 +35,18 @@ class PostService:
 
         return str(result.inserted_id)
 
-    def update_post_by_id(self, form_data: dict, post_id: str):
+    def update_post(self, form_data: dict) -> str:
+        post_id = form_data["id"]
+
         post_data = {
-            "title": form_data.get("title"),
-            "created_at": form_data.get("created_at"),
-            "content": form_data.get("content"),
-            "folder": form_data.get("folder")
+            "title": form_data["title"],
+            "created_at": form_data["created_at"],
+            "content_html": form_data["content_html"],
+            "folder": form_data["folder"]
         }
-        return self.post_repository.update(post_data, id=post_id)
+        self.post_repository.update(post_data, id=post_id)
+
+        return post_id
 
     def get_post_by_id(self, post_id: str) -> Post:
         return self.post_repository.get(id=post_id)

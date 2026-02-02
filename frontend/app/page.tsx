@@ -1,5 +1,5 @@
 "use client";
-import Posts from "./posts/page";
+import Posts from "@/app/posts/page";
 
 
 export default function Home() {

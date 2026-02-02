@@ -2,32 +2,24 @@
 import { Card, CardHeader, CardBody } from "@heroui/card";
 import { Button } from "@heroui/button";
 import { Link } from "@heroui/link";
-import NextLink from "next/link";
+// import Link from "next/link";
 import { Pen } from "lucide-react";
 import { useState } from "react";
 import type { Post } from "@/types/post";
-import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 import 'react-quill/dist/quill.snow.css';
-import { DeletePost } from "./postCard/DeletePost";
-import { PostHeaderInfo } from "./postCard/PostHeaderInfo";
+import { DeletePost } from "@/components/Post/PostCard/DeletePost";
+import { PostHeaderInfo } from "@/components/Post/PostCard/PostHeaderInfo";
 
 interface PostCardProps {
   post: Post;
   onDelete: (postId: string) => void;
 }
 
-export function PostCard({ post, onDelete }: PostCardProps) {
+function PostCard({ post, onDelete }: PostCardProps) {
   const [expanded, setExpanded] = useState(false);
-
-  const converter = new QuillDeltaToHtmlConverter(post.content.ops ?? [], {
-    inlineStyles: true,
-  });
-
-  const html = converter.convert();
 
   return (
     <Card className="mb-4 p-3">
-      {/* HEADER */}
       <CardHeader className="flex justify-between items-start gap-4">
         <div>
           <Link href={`/posts/${post.id}`}>
@@ -41,7 +33,7 @@ export function PostCard({ post, onDelete }: PostCardProps) {
 
           <DeletePost postId={post.id} onDeleted={() => onDelete(post.id)}/>
 
-          <Button as={NextLink}
+          <Button as={Link}
             href={`/posts/${post.id}/edit`}
             isIconOnly
             size="sm"
@@ -54,13 +46,12 @@ export function PostCard({ post, onDelete }: PostCardProps) {
 
       </CardHeader>
 
-      {/* BODY */}
       <CardBody>
-        <div className={`text-default-700 whitespace-pre-line ${
-            expanded ? "" : "line-clamp-7"
-          }`}
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
+        <div className="sun-content">
+          <div className="text-default-700 whitespace-pre-line"
+            dangerouslySetInnerHTML={{ __html: post.content_html }}
+          />
+        </div>
 
         <Button
             size="sm"
@@ -74,3 +65,5 @@ export function PostCard({ post, onDelete }: PostCardProps) {
     </Card>
   );
 }
+
+export { PostCard }

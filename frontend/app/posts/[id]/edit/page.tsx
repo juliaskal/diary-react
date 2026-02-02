@@ -1,5 +1,5 @@
 import type { Post } from "@/types/post";
-import { PostForm } from "@/components/postForm/PostForm";
+import { PostForm } from "@/components/Post/PostForm/PostForm";
 import { siteConfig } from "@/config/site";
 import clsx from "clsx";
 import { title } from "@/components/primitives";
@@ -30,7 +30,7 @@ export default async function EditPostPage({ params }: Props) {
         изменить запись
       </h1>
 
-      <PostForm post={post} />
+      <PostForm post={post} isNew={false} />
     </div>
   );
 }

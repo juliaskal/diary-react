@@ -1,5 +1,5 @@
 import type { Post } from "@/types/post";
-import { PostCard } from "./PostCard";
+import { PostCard } from "@/components/Post/PostCard";
 import { Pagination } from "@heroui/pagination";
 
 
@@ -8,7 +8,7 @@ interface PostListProps {
   onDelete: (postId: string) => void;
 }
 
-export function PostList({ posts, onDelete }: PostListProps) {
+function PostList({ posts, onDelete }: PostListProps) {
   return (
     <div>
       {posts.map((post) => (
@@ -22,3 +22,5 @@ export function PostList({ posts, onDelete }: PostListProps) {
     </div>
   );
 }
+
+export { PostList }

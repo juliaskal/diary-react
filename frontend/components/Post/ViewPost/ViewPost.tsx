@@ -7,9 +7,8 @@ import Link from "next/link";
 import { title } from "@/components/primitives";
 import { Pen } from "lucide-react";
 import type { Post } from "@/types/post";
-import { PostHeaderInfo } from "./postCard/PostHeaderInfo";
-import { DeletePost } from "./postCard/DeletePost";
-import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
+import { PostHeaderInfo } from "@/components/Post/PostCard/PostHeaderInfo";
+import { DeletePost } from "@/components/Post/PostCard/DeletePost";
 import 'react-quill/dist/quill.snow.css';
 import { Spinner } from "@heroui/spinner";
 import { siteConfig } from "@/config/site";
@@ -17,7 +16,7 @@ import { useRouter } from "next/navigation";
 
 type ViewPostProps = { postId: string };
 
-export function ViewPost({ postId }: ViewPostProps) {
+function ViewPost({ postId }: ViewPostProps) {
   const router = useRouter();
 
   const [post, setPost] = useState<Post>();
@@ -47,19 +46,12 @@ export function ViewPost({ postId }: ViewPostProps) {
 
   if (!post) return <div>Запись не найдена</div>;
 
-  const converter = new QuillDeltaToHtmlConverter(post.content.ops ?? [], {
-    inlineStyles: true,
-  });
-
-  const html = converter.convert();
-
   return (
     <div className="flex flex-col gap-10">
 
     <h1 className={title()}>{post.title}</h1>
 
-    <Card className="mb-4 p-3">
-      {/* HEADER */}
+    <Card className="mb-4 p-3 w-full">
       <CardHeader className="flex justify-between items-start gap-4">
 
         <PostHeaderInfo post={post} />
@@ -67,17 +59,24 @@ export function ViewPost({ postId }: ViewPostProps) {
         <div className="flex gap-1">
           <DeletePost postId={post.id} onDeleted={handlePostDelete}/>
 
-          <Button isIconOnly size="sm" variant="light">
+          <Button as={Link}
+            href={`/posts/${post.id}/edit`}
+            isIconOnly
+            size="sm"
+            variant="light"
+          >
             <Pen className="w-4 h-4" />
           </Button>
+
         </div>
       </CardHeader>
 
-      {/* BODY */}
       <CardBody>
-        <div className={`text-default-700 whitespace-pre-line`}
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
+        <div className="sun-content">
+          <div className="text-default-700 whitespace-pre-line"
+            dangerouslySetInnerHTML={{ __html: post.content_html }}
+          />
+        </div>
       </CardBody>
     </Card>
 
@@ -94,3 +93,5 @@ export function ViewPost({ postId }: ViewPostProps) {
     </div>
   );
 }
+
+export { ViewPost }

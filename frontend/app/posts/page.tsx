@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import type { Post } from "@/types/post";
-import { PostList } from "@/components/PostList";
+import { PostList } from "@/components/Post/PostList";
 import {Spinner} from "@heroui/spinner";
 import { siteConfig } from "@/config/site";
 

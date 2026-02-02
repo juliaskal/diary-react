@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import "@/styles/sun-editor.css";
 import { Metadata, Viewport } from "next";
 import clsx from "clsx";
 import { Providers } from "./providers";
