@@ -1,6 +1,5 @@
-import { useState } from "react";
 import SunEditor from "suneditor-react";
-import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
+import "suneditor/dist/css/suneditor.min.css";
 
 const defaultFonts = [
   "Arial",
@@ -36,11 +35,12 @@ export function Editor({ content_html, onChange }: EditorProps) {
       <SunEditor
         setContents={content_html}
         onChange={onChange}
+        setDefaultStyle="font-family: Helvetica; font-size: 16px;"
         setOptions={{
           buttonList: [
             ["undo", "redo"],
             ["font", "fontSize"],
-            ['paragraphStyle', 'blockquote'],
+            ['blockquote'],
             [
               "bold",
               "underline",
@@ -53,7 +53,7 @@ export function Editor({ content_html, onChange }: EditorProps) {
             ["align", "list", "lineHeight"],
             ["outdent", "indent"],
 
-            ["table", "horizontalRule", "link", "image", "video"],
+            ["table", "link", "image", "video"],
             // ['math'] //You must add the 'katex' library at options to use the 'math' plugin.
             // ['imageGallery'], // You must add the "imageGalleryUrl".
             ["fullScreen", "showBlocks", "codeView"],
