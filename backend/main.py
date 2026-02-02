@@ -1,8 +1,6 @@
 from typing import Annotated
-from fastapi import FastAPI, Request, Body
-from fastapi.responses import HTMLResponse, JSONResponse
-from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
+from fastapi import FastAPI, Body
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dependencies import PostServiceDependency, FolderServiceDependency
 from models import Post

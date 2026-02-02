@@ -35,7 +35,6 @@ function DeletePost({ postId, onDeleted  }: DeletePostProps) {
 
   return (
     <>
-      {/* КНОПКА УДАЛЕНИЯ */}
       <Button
         isIconOnly
         size="sm"
@@ -46,7 +45,6 @@ function DeletePost({ postId, onDeleted  }: DeletePostProps) {
         <Trash2 className="w-4 h-4" />
       </Button>
 
-      {/* МОДАЛЬНОЕ ОКНО */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalContent>
           <ModalHeader>Удалить запись?</ModalHeader>
