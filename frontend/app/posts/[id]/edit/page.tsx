@@ -30,7 +30,7 @@ export default async function EditPostPage({ params }: Props) {
         изменить запись
       </h1>
 
-      <PostForm post={post} />
+      <PostForm post={post} isNew={false} />
     </div>
   );
 }

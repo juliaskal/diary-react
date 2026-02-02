@@ -37,9 +37,7 @@ export function FolderSelect({ value, onChange }: FolderSelectProps) {
       startContent={<FolderHeart className="text-default-700" />}
       variant="bordered"
       selectedKey={value}
-      onSelectionChange={(key) =>
-        onChange(key ? String(key) : null)
-      }
+      onSelectionChange={(key) => onChange(key ? String(key) : null)}
       isDisabled={loading}
     >
       {folders.map((f) => (

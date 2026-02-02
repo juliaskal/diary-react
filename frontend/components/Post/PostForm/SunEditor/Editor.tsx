@@ -14,11 +14,11 @@ const defaultFonts = [
 ];
 
 interface EditorProps {
-  content: string | null;
+  content_html: string;
+  onChange: (value: string) => void;
 }
 
-export function Editor({ content }: EditorProps) {
-  const [value, setValue] = useState(content ?? "");
+export function Editor({ content_html, onChange }: EditorProps) {
 
   const sortedFontOptions = [
     "Logical",
@@ -34,8 +34,8 @@ export function Editor({ content }: EditorProps) {
   return (
     <div className="App">
       <SunEditor
-        setContents={value}
-        onChange={setValue}
+        setContents={content_html}
+        onChange={onChange}
         setOptions={{
           buttonList: [
             ["undo", "redo"],

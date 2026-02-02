@@ -22,7 +22,7 @@ function DeletePost({ postId, onDeleted  }: DeletePostProps) {
 
   async function handleDelete() {
     try {
-      await fetch(`${siteConfig.backendDomain}/api/posts/${postId}`, {
+      await fetch(`${siteConfig.backendDomain}/api/post/${postId}`, {
         method: "DELETE",
       });
 

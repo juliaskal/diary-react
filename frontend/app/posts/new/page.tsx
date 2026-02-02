@@ -6,7 +6,7 @@ export default function AddPost() {
   return (
     <div className="flex flex-col gap-10">
       <h1 className={clsx(title(), "tracking-wider")}>создать запись</h1>
-      <PostForm post={null} />
+      <PostForm post={null} isNew={true} />
     </div>
   );
 }

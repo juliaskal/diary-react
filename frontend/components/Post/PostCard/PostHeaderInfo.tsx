@@ -27,12 +27,14 @@ return (
                 в {new Date(post.created_at).toLocaleString("ru-RU", {hour: "2-digit", minute: "2-digit"})}
             </p>
 
-            <Link href="#">
-                <p className="text-left">
-                <span className="text-sm text-default-500">папка: </span>
-                <span className="text-medium font-medium text-blue-500">{post.folder.name}</span>
-                </p>
-            </Link>
+            {post.folder &&
+                <Link href="#">
+                    <p className="text-left">
+                    <span className="text-sm text-default-500">папка: </span>
+                    <span className="text-medium font-medium text-blue-500">{post.folder.name}</span>
+                    </p>
+                </Link>
+            }
         </div>
 
     </div>
