@@ -9,7 +9,8 @@ import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { useRouter } from "next/navigation";
 import { IconPicker } from "@/components/Folder/FolderForm/IconPicker"
-import { FOLDER_ICONS, FolderIconName } from "@/shared/icons"
+import { FolderIconName } from "@/shared/icons"
+import { CoverPicker } from "@/components/Folder/FolderForm/CoverPicker"
 
 interface FolderFormProps {
   folder: Folder | null;
@@ -21,14 +22,14 @@ function FolderForm({ folder, isNew = true }: FolderFormProps) {
 
   const [name, setName] = useState(folder?.name ?? "");
   const [icon, setIcon] = useState<FolderIconName>("folder")
-
-  const SelectedIcon = FOLDER_ICONS[icon]
+  const [cover, setCover] = useState<string | null>(null)
 
   const handleSubmit = async () => {
     const payload = {
       id: folder?.id,
       name,
       icon,
+      cover,
       created_at: now(getLocalTimeZone()).toDate().toISOString(),
     };
 
@@ -74,12 +75,16 @@ function FolderForm({ folder, isNew = true }: FolderFormProps) {
       />
 
       <div>
-        <p className="mb-2 text-sm text-default-500">Иконка папки</p>
+        <p className="mb-2 text-sm text-default-500">Иконка</p>
         <IconPicker value={icon} onChange={setIcon} />
       </div>
 
-      <div className="flex flex-wrap gap-4 items-center mt-4">
+        <div className="w-full">
+            <p className="mb-2 text-sm text-default-500">Обложка</p>
+            <CoverPicker value={cover} onChange={setCover} />
+        </div>
 
+      <div className="flex flex-wrap gap-4 items-center mt-4">
         <Button
           size="sm"
           className="bg-linear-to-tr from-rose-300 to-pink-400 shadow-lg tracking-widest px-8"

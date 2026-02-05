@@ -6,9 +6,6 @@ import "swiper/css";
 import "swiper/css/effect-creative";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
-import NextLink from "next/link";
-import { Button } from "@heroui/button";
-import { FolderPlus } from 'lucide-react';
 
 import { cn } from "@/lib/utils";
 
