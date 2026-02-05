@@ -6,7 +6,6 @@ import { Link } from "@heroui/link";
 import { Pen } from "lucide-react";
 import { useState } from "react";
 import type { Post } from "@/types/post";
-import 'react-quill/dist/quill.snow.css';
 import { DeletePost } from "@/components/Post/PostCard/DeletePost";
 import { PostHeaderInfo } from "@/components/Post/PostCard/PostHeaderInfo";
 

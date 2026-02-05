@@ -1,45 +1,44 @@
 "use client";
+
 import { Button } from "@heroui/button";
 import { useState } from "react";
-import type { Post } from "@/types/post";
+import type { Folder } from "@/types/folder";
 import { Input } from "@heroui/input";
-import { DatePicker } from "@heroui/date-picker";
-import { now, getLocalTimeZone, ZonedDateTime } from "@internationalized/date";
+import { now, getLocalTimeZone } from "@internationalized/date";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { useRouter } from "next/navigation";
-import { FolderSelect } from "@/components/Post/PostForm/FolderSelect";
-import { Editor } from "@/components/Post/PostForm/SunEditor/Editor";
+import { IconPicker } from "@/components/Folder/FolderForm/IconPicker"
+import { FOLDER_ICONS, FolderIconName } from "@/shared/icons"
 
-interface PostFormProps {
-  post: Post | null;
+interface FolderFormProps {
+  folder: Folder | null;
   isNew: boolean;
 }
 
-function PostForm({ post, isNew = true }: PostFormProps) {
+function FolderForm({ folder, isNew = true }: FolderFormProps) {
   const router = useRouter();
 
-  const [title, setTitle] = useState(post?.title ?? "");
-  const [date, setDate] = useState<ZonedDateTime | null>(now(getLocalTimeZone()));
-  const [folder, setFolder] = useState<string | null>(post?.folder?.id ?? null);
-  const [content_html, setContent] = useState<string>(post?.content_html ?? "");
+  const [name, setName] = useState(folder?.name ?? "");
+  const [icon, setIcon] = useState<FolderIconName>("folder")
+
+  const SelectedIcon = FOLDER_ICONS[icon]
 
   const handleSubmit = async () => {
     const payload = {
-      id: post?.id,
-      title,
-      folder,
-      content_html,
-      created_at: date?.toDate().toISOString(),
+      id: folder?.id,
+      name,
+      icon,
+      created_at: now(getLocalTimeZone()).toDate().toISOString(),
     };
 
     if (!isNew) {
-      payload.id = post!.id
+      payload.id = folder!.id
     }
 
     const url = isNew
-      ? `${siteConfig.backendDomain}/api/post/new`
-      : `${siteConfig.backendDomain}/api/post/update`
+      ? `${siteConfig.backendDomain}/api/folder/new`
+      : `${siteConfig.backendDomain}/api/folder/update`
 
     try {
       const res = await fetch(url, {
@@ -56,7 +55,7 @@ function PostForm({ post, isNew = true }: PostFormProps) {
       }
 
       const data = await res.json();
-      router.push(`/posts/${data.id}`);
+      router.push(`/folders/${data.id}`);
 
     } catch (err) {
       console.error("Ошибка при отправке:", err);
@@ -67,27 +66,17 @@ function PostForm({ post, isNew = true }: PostFormProps) {
     <div className="w-full flex flex-col items-start gap-4 text-left">
 
       <Input
-        label="Заголовок"
+        label="Название"
         labelPlacement="outside"
         variant="bordered"
-        value={title}
-        onValueChange={setTitle}
+        value={name}
+        onValueChange={setName}
       />
 
-      <DatePicker
-        hideTimeZone
-        showMonthAndYearPickers
-        value={date}
-        label="Дата"
-        variant="bordered"
-        hourCycle={24}
-        className="max-w-xs"
-        onChange={setDate}
-      />
-
-      <FolderSelect value={folder} onChange={setFolder}/>
-
-      <Editor onChange={setContent} content_html={post?.content_html ?? ""} />
+      <div>
+        <p className="mb-2 text-sm text-default-500">Иконка папки</p>
+        <IconPicker value={icon} onChange={setIcon} />
+      </div>
 
       <div className="flex flex-wrap gap-4 items-center mt-4">
 
@@ -115,4 +104,4 @@ function PostForm({ post, isNew = true }: PostFormProps) {
   );
 }
 
-export { PostForm }
+export { FolderForm }

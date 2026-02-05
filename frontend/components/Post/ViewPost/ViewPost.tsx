@@ -9,7 +9,6 @@ import { Pen } from "lucide-react";
 import type { Post } from "@/types/post";
 import { PostHeaderInfo } from "@/components/Post/PostCard/PostHeaderInfo";
 import { DeletePost } from "@/components/Post/PostCard/DeletePost";
-import 'react-quill/dist/quill.snow.css';
 import { Spinner } from "@heroui/spinner";
 import { siteConfig } from "@/config/site";
 import { useRouter } from "next/navigation";

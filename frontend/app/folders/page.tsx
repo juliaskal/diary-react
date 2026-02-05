@@ -1,10 +1,10 @@
 "use client";
 
-import { FolderList } from "@/components/Folder/FolderList";
+import { FolderPage } from "@/components/Folder";
 
 
 export default function Folders() {
   return (
-      <FolderList />
+      <FolderPage />
   );
 }
