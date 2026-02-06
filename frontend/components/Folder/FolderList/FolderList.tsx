@@ -6,56 +6,22 @@ import "swiper/css";
 import "swiper/css/effect-creative";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
-
 import { cn } from "@/lib/utils";
+import type { Folder } from "@/types/folder";
+import { DeleteFolder } from "@/components/Folder/FolderList/DeleteFolder";
+import { Pen } from "lucide-react";
+import { Button } from "@heroui/button";
+import { Link } from "@heroui/link";
 
-const FolderList = () => {
-  const images = [
-    {
-      src: "/images/GxZwofWXUAAr2fv.jpg",
-      alt: "Название папки",
-      code: "common",
-    },
-    {
-      src: "/images/GnENKl9bgAItxzb.jpg",
-      alt: "Название папки",
-      code: "love",
-    },
-    {
-      src: "/images/GpyedpbXkAAddqH.jpg",
-      alt: "Название папки",
-      code: "pole",
-    },
-    {
-      src: "/images/G0-854NWwAAsPDf.jpg",
-      alt: "Название папки",
-      code: "work",
-    },
-    {
-      src: "/images/Gw9Y6syWAAAIwLI.jpg",
-      alt: "Название папки",
-      code: "# 23",
-    },
-    {
-      src: "/images/GkPlQrqW0AAt9ue.jpg",
-      alt: "Название папки",
-      code: "# 23",
-    },
-    {
-      src: "/images/GuRCsKwaAAA_xkK.jpg",
-      alt: "Название папки",
-      code: "# 23",
-    },
-    {
-      src: "/images/GrAehDgaAAIqhcd.jpg",
-      alt: "Название папки",
-      code: "# 23",
-    },
-  ];
+interface FolderPageProps {
+  folders: Folder[];
+  onDelete: (folderId: string) => void;
+}
 
+function FolderList({ folders, onDelete }: FolderPageProps) {
   return (
     <div className="flex h-full w-full items-center justify-center overflow-hidden">
-      <FolderCards className="" images={images} />{" "}
+      <FolderCards className="" folders={folders} onDelete={onDelete} />{" "}
     </div>
   );
 };
@@ -63,10 +29,12 @@ const FolderList = () => {
 export { FolderList };
 
 const FolderCards = ({
-  images,
+  folders,
+  onDelete,
   className,
 }: {
-  images: { src: string; alt: string; code: string }[];
+  folders: Folder[];
+  onDelete: (folderId: string) => void;
   className?: string;
 }) => {
   const [activeImage, setActiveImage] = useState<number | null>(1);
@@ -88,13 +56,13 @@ const FolderCards = ({
         className="w-full"
       >
         <div className="flex w-full items-center justify-center gap-1">
-          {images.map((image, index) => (
+          {folders.map((folder, index) => (
             <motion.div
               key={index}
               className="relative cursor-pointer overflow-hidden rounded-3xl"
               initial={{ width: "2.5rem", height: "20rem" }}
               animate={{
-                width: activeImage === index ? "24rem" : "5rem",
+                width: activeImage === index ? "24rem" : "7rem",
                 height: activeImage === index ? "24rem" : "24rem",
               }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -111,24 +79,40 @@ const FolderCards = ({
                   />
                 )}
               </AnimatePresence>
+
               <AnimatePresence>
                 {activeImage === index && (
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="absolute flex h-full w-full flex-col items-end justify-end p-4"
+                    className="absolute flex h-full w-full justify-between items-end p-4"
                   >
-                    <p className="text-left text-xs text-white/50">
-                      {image.code}
-                    </p>
+                    <Link href={`/folders/${folder.id}`}>
+                      <p className="text-left text-sm text-white/70">
+                        {folder.name}
+                      </p>
+                    </Link>
+
+                    <div className="flex gap-1">
+                      <DeleteFolder folderId={folder.id} onDeleted={() => onDelete(folder.id)}/>
+
+                      <Button as={Link}
+                        href={`/folders/${folder.id}/edit`}
+                        isIconOnly
+                        size="sm"
+                        variant="light"
+                      >
+                        <Pen className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
               <img
-                src={image.src}
+                src={folder.cover ?? '/images/folder-default.png'}
                 className="size-full object-cover"
-                alt={image.alt}
+                alt={folder.name}
               />
             </motion.div>
           ))}

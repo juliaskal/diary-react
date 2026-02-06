@@ -5,10 +5,20 @@ import { FolderHeart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { siteConfig } from "@/config/site";
 import type { Folder } from "@/types/folder";
+import { FOLDER_ICONS, FolderIconName } from "@/shared/icons"
+import { FolderOpen } from "lucide-react";
 
 interface FolderSelectProps {
   value: string | null;
   onChange: (folderId: string | null) => void;
+}
+
+function getFolderIcon(icon: string | null) {
+  if (!icon) return FolderOpen
+  if (icon in FOLDER_ICONS) {
+    return FOLDER_ICONS[icon as FolderIconName]
+  }
+  return FolderOpen
 }
 
 export function FolderSelect({ value, onChange }: FolderSelectProps) {
@@ -40,11 +50,16 @@ export function FolderSelect({ value, onChange }: FolderSelectProps) {
       onSelectionChange={(key) => onChange(key ? String(key) : null)}
       isDisabled={loading}
     >
-      {folders.map((f) => (
-        <AutocompleteItem key={f.id}>
+      {folders.map((f) => {
+        const Icon = getFolderIcon(f.icon)
+
+        return (<AutocompleteItem
+          key={f.id}
+          startContent={<Icon className="text-default-700" />}
+        >
           {f.name}
-        </AutocompleteItem>
-      ))}
+        </AutocompleteItem>)
+      })}
     </Autocomplete>
   );
 }

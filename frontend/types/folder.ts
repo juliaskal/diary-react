@@ -1,7 +1,9 @@
+import { FolderIconName } from "@/shared/icons"
+
 export interface Folder {
   id: string;
   name: string;
-  icon: string | null;
+  icon: FolderIconName | null;
   cover: string | null;
   craeted_at: string;
 }

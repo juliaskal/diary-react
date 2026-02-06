@@ -21,8 +21,8 @@ function FolderForm({ folder, isNew = true }: FolderFormProps) {
   const router = useRouter();
 
   const [name, setName] = useState(folder?.name ?? "");
-  const [icon, setIcon] = useState<FolderIconName>("folder")
-  const [cover, setCover] = useState<string | null>(null)
+  const [icon, setIcon] = useState<FolderIconName>(folder?.icon ?? "folder")
+  const [cover, setCover] = useState<string | null>(folder?.cover ?? null)
 
   const handleSubmit = async () => {
     const payload = {

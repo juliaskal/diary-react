@@ -4,8 +4,14 @@ import { FolderList } from "./FolderList";
 import NextLink from "next/link";
 import { Button } from "@heroui/button";
 import { FolderPlus } from 'lucide-react';
+import type { Folder } from "@/types/folder";
 
-const FolderPage = () => {
+interface FolderPageProps {
+  folders: Folder[];
+  onDelete: (folderId: string) => void;
+}
+
+function FolderPage({ folders, onDelete }: FolderPageProps) {
   return (
     <div className="flex flex-col gap-10">
       <NextLink href={'/folders/new'}>
@@ -18,7 +24,7 @@ const FolderPage = () => {
         </Button>
       </NextLink>
 
-      <FolderList />
+      <FolderList folders={folders} onDelete={onDelete}/>
 
     </div>
   );
