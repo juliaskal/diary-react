@@ -3,7 +3,7 @@ from fastapi import FastAPI, Body
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dependencies import PostServiceDependency, FolderServiceDependency
-from models import Post
+from models import Post, Folder
 
 
 app = FastAPI()
@@ -55,3 +55,45 @@ async def delete_post(post_id: str, post_service: PostServiceDependency):
 @app.get("/api/folders")
 async def get_folders(folder_sercice: FolderServiceDependency):
     return folder_sercice.get_list()
+
+
+@app.get("/api/folder/{folder_id}", response_model=Folder)
+async def get_folder(
+    folder_service: FolderServiceDependency,
+    folder_id: str
+):
+    return folder_service.get_folder_by_id(folder_id)
+
+
+@app.post("/api/folder/new")
+async def new_folder(
+    form_data: Annotated[dict, Body()],
+    folder_service: FolderServiceDependency
+):
+    folder_id = folder_service.create_folder(form_data)
+    return JSONResponse({"id": folder_id})
+
+
+@app.post("/api/folder/update")
+async def update_folder(
+    form_data: Annotated[dict, Body()],
+    folder_service: FolderServiceDependency
+):
+    folder_id = folder_service.update_folder(form_data)
+    return JSONResponse({"id": folder_id})
+
+
+@app.delete("/api/folder/with-notes/{folder_id}")
+async def delete_folder_with_notes(
+    folder_id: str,
+    folder_service: FolderServiceDependency
+):
+    return folder_service.delete_folder_with_notes(folder_id)
+
+
+@app.delete("/api/folder/save-notes/{folder_id}")
+async def delete_folder_save_notes(
+    folder_id: str,
+    folder_service: FolderServiceDependency
+):
+    return folder_service.delete_folder_save_notes(folder_id)
