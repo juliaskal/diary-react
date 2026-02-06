@@ -40,7 +40,8 @@ PostServiceDependency = Annotated[PostService, Depends(get_post_service)]
 
 def get_folder_service():
     return FolderService(
-        folder_repository=get_folder_repository()
+        folder_repository=get_folder_repository(),
+        post_repository=get_post_repository()
     )
 
 
