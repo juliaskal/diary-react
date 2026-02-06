@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timedelta
 from typing import Any, Callable
 from functools import wraps
 from bson.objectid import ObjectId
@@ -33,3 +34,10 @@ def rename_arguments(**arguments_to_rename):
 
 def cast_dict_value(dictionary: dict, key: Any, type: Callable = str):
     return dictionary | {key: type(dictionary[key])}
+
+
+def prosess_created_at(created_at: str | None) -> datetime:
+    if created_at:
+        return datetime.fromisoformat(created_at) + timedelta(hours=3)
+    else:
+        return datetime.now()
