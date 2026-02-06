@@ -4,7 +4,12 @@ import { useState } from "react";
 import type { Post } from "@/types/post";
 import { Input } from "@heroui/input";
 import { DatePicker } from "@heroui/date-picker";
-import { now, getLocalTimeZone, ZonedDateTime } from "@internationalized/date";
+import {
+  fromDate,
+  now,
+  getLocalTimeZone,
+  ZonedDateTime
+} from "@internationalized/date";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { useRouter } from "next/navigation";
@@ -20,7 +25,11 @@ function PostForm({ post, isNew = true }: PostFormProps) {
   const router = useRouter();
 
   const [title, setTitle] = useState(post?.title ?? "");
-  const [date, setDate] = useState<ZonedDateTime | null>(now(getLocalTimeZone()));
+  const [date, setDate] = useState<ZonedDateTime | null>(
+    post?.created_at
+      ? fromDate(new Date(post.created_at), getLocalTimeZone())
+      : now(getLocalTimeZone())
+  );
   const [folder, setFolder] = useState<string | null>(post?.folder?.id ?? null);
   const [content_html, setContent] = useState<string>(post?.content_html ?? "");
 
