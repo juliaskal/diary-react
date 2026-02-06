@@ -2,7 +2,6 @@
 import { Card, CardHeader, CardBody } from "@heroui/card";
 import { Button } from "@heroui/button";
 import { Link } from "@heroui/link";
-// import Link from "next/link";
 import { Pen } from "lucide-react";
 import { useState } from "react";
 import type { Post } from "@/types/post";
