@@ -81,7 +81,7 @@ class DictMongoRepository:
         document = self._collection.find_one(filter)
         if document is None:
             return None
-        return document
+        return cast_dict_value(rename_dict_keys(document, _id="id"), 'id', str)
 
     def add_to_list(self, update: dict, **filter):
         return self._collection.update_one(filter, {'$addToSet': update})
