@@ -1,4 +1,4 @@
-from datetime import datetime
+from utils import prosess_created_at
 from models import Post, Folder
 from mongodb import GenericMongoRepository
 
@@ -14,18 +14,11 @@ class PostService:
         self.folder_repository = folder_repository
 
     def create_post(self, form_data: dict) -> str:
-        created_at = form_data.get("created_at")
-        if created_at:
-            created_at_datetime = datetime.fromisoformat(created_at)
-        else:
-            created_at_datetime = datetime.now()
-
-        folder = self.folder_repository.find(
-            id=form_data.get("folder"))
+        folder = self.folder_repository.find(id=form_data.get("folder"))
 
         post_data = {
             "title": form_data.get("title"),
-            "created_at": created_at_datetime,
+            "created_at": prosess_created_at(form_data.get("created_at")),
             "content_html": form_data.get("content_html"),
             "folder": folder
         }
@@ -37,12 +30,13 @@ class PostService:
 
     def update_post(self, form_data: dict) -> str:
         post_id = form_data["id"]
+        folder = self.folder_repository.find(id=form_data.get("folder"))
 
         post_data = {
             "title": form_data["title"],
-            "created_at": form_data["created_at"],
+            "created_at": prosess_created_at(form_data["created_at"]),
             "content_html": form_data["content_html"],
-            "folder": form_data["folder"]
+            "folder": folder.model_dump() if folder else folder
         }
         self.post_repository.update(post_data, id=post_id)
 
