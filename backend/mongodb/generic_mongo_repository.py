@@ -22,16 +22,10 @@ class GenericMongoRepository(Generic[T]):
         return get_args(self.__orig_class__)[0]  # type: ignore[attr-defined]  # pylint: disable=E1101
 
     def add(self, model: T):
-        return self._mongo_repository.add(model)
+        return self._mongo_repository.add(model).inserted_id
 
     def add_many(self, models: Sequence[T]):
         return self._mongo_repository.add_many(models)
-
-    def add_from_json(self, document: dict):
-        return self._mongo_repository.add_from_json(document)
-
-    def add_many_from_json(self, documents: list[dict]):
-        return self._mongo_repository.add_many_from_json(documents)
 
     def get(self, **filter) -> T:
         return self._mongo_repository.get(model_type=self.model_type, **filter)
@@ -45,20 +39,17 @@ class GenericMongoRepository(Generic[T]):
     def count(self, **filter) -> int:
         return self._mongo_repository.count(**filter)
 
-    def distinct(self, key: str, **filter) -> list[str]:
-        return self._mongo_repository.distinct(key, **filter)
-
     def update(self, update: dict, **filter):
-        return self._mongo_repository.update(update, **filter)
+        return self._mongo_repository.update(update, **filter).upserted_id
 
     def update_many(self, update: dict, **filter):
-        return self._mongo_repository.update_many(update, **filter)
+        return self._mongo_repository.update_many(update, **filter).modified_count
 
     def delete(self, **filter):
-        return self._mongo_repository.delete(**filter)
+        return self._mongo_repository.delete(**filter).deleted_count
 
     def delete_many(self, **filter):
-        return self._mongo_repository.delete_many(**filter)
+        return self._mongo_repository.delete_many(**filter).deleted_count
 
     def find(self, **filter) -> T | None:
         return self._mongo_repository.find(model_type=self.model_type, **filter)

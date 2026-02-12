@@ -1,14 +1,14 @@
 from utils import prosess_created_at
 from models import Post, Folder
-from mongodb import GenericMongoRepository
+from db import GenericRepository
 
 
 class PostService:
 
     def __init__(
             self,
-            post_repository: GenericMongoRepository[Post],
-            folder_repository: GenericMongoRepository[Folder]
+            post_repository: GenericRepository[Post],
+            folder_repository: GenericRepository[Folder]
     ):
         self.post_repository = post_repository
         self.folder_repository = folder_repository
@@ -26,10 +26,9 @@ class PostService:
         post = Post(**post_data)
         result = self.post_repository.add(post)
 
-        return str(result.inserted_id)
+        return str(result)
 
     def update_post(self, form_data: dict) -> str:
-        post_id = form_data["id"]
         folder = self.folder_repository.find(id=form_data.get("folder"))
 
         post_data = {
@@ -38,9 +37,9 @@ class PostService:
             "content_html": form_data["content_html"],
             "folder": folder.model_dump() if folder else folder
         }
-        self.post_repository.update(post_data, id=post_id)
+        result = self.post_repository.update(post_data, id=form_data["id"])
 
-        return post_id
+        return str(result)
 
     def get_post_by_id(self, post_id: str) -> Post:
         return self.post_repository.get(id=post_id)
@@ -49,4 +48,4 @@ class PostService:
         return self.post_repository.get_list()
 
     def delete_post(self, post_id: str) -> int:
-        return self.post_repository.delete(id=post_id).deleted_count
+        return self.post_repository.delete(id=post_id)

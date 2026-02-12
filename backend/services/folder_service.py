@@ -19,21 +19,21 @@ class FolderService:
     def get_folder_by_id(self, folder_id: str) -> Folder:
         return self.folder_repository.get(id=folder_id)
 
-    def delete_folder_with_notes(self, folder_id: str) -> int:
+    def delete_cascade(self, folder_id: str) -> int:
         deleted_folders = self.folder_repository.delete(id=folder_id)
 
         params = {"folder.id": folder_id}
         deleted_posts = self.post_repository.delete_many(**params)
 
-        return deleted_folders.deleted_count + deleted_posts.deleted_count
+        return deleted_folders + deleted_posts
 
-    def delete_folder_save_notes(self, folder_id: str) -> int:
+    def delete_set_null(self, folder_id: str) -> int:
         deleted_folders = self.folder_repository.delete(id=folder_id)
 
         params = {"folder.id": folder_id}
         updated_posts = self.post_repository.update_many({"folder": None}, **params)
 
-        return deleted_folders.deleted_count + updated_posts.modified_count
+        return deleted_folders + updated_posts
 
     def create_folder(self, form_data: dict) -> str:
         folder_data = {
@@ -46,7 +46,7 @@ class FolderService:
         folder = Folder(**folder_data)
         result = self.folder_repository.add(folder)
 
-        return str(result.inserted_id)
+        return str(result)
 
     def update_folder(self, form_data: dict) -> str:
         folder_data = {
@@ -58,4 +58,4 @@ class FolderService:
 
         result = self.folder_repository.update(folder_data, id=form_data["id"])
 
-        return str(result.upserted_id)
+        return str(result)

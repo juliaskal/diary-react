@@ -84,16 +84,16 @@ async def update_folder(
 
 
 @app.delete("/api/folder/with-notes/{folder_id}")
-async def delete_folder_with_notes(
+async def delete_cascade(
     folder_id: str,
     folder_service: FolderServiceDependency
 ):
-    return folder_service.delete_folder_with_notes(folder_id)
+    return folder_service.delete_cascade(folder_id)
 
 
 @app.delete("/api/folder/save-notes/{folder_id}")
-async def delete_folder_save_notes(
+async def delete_set_null(
     folder_id: str,
     folder_service: FolderServiceDependency
 ):
-    return folder_service.delete_folder_save_notes(folder_id)
+    return folder_service.delete_set_null(folder_id)
