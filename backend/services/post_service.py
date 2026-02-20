@@ -46,7 +46,8 @@ class PostService:
         return self.post_repository.get(id=post_id)
 
     def get_posts(self):
-        return self.post_repository.get_list()
+        posts = self.post_repository.get_list()
+        return sorted(posts, key=lambda post: post.created_at, reverse=True)
 
     def delete_post(self, post_id: str) -> int:
         return self.post_repository.delete(id=post_id).deleted_count

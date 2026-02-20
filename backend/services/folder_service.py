@@ -58,4 +58,7 @@ class FolderService:
 
         result = self.folder_repository.update(folder_data, id=form_data["id"])
 
+        params = {"folder.id": form_data["id"]}
+        self.post_repository.update_many({"folder": folder_data}, **params)
+
         return str(result.upserted_id)
