@@ -7,4 +7,5 @@ export const FOLDER_COVERS = [
   "/images/GkPlQrqW0AAt9ue.jpg",
   "/images/GuRCsKwaAAA_xkK.jpg",
   "/images/GrAehDgaAAIqhcd.jpg",
+  "/images/77986b87-a5d4-47a7-8714-627eda572e72.jpg",
 ]
