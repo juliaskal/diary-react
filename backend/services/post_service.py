@@ -29,6 +29,7 @@ class PostService:
         return str(result)
 
     def update_post(self, form_data: dict) -> str:
+        post_id = form_data["id"]
         folder = self.folder_repository.find(id=form_data.get("folder"))
 
         post_data = {
@@ -37,9 +38,9 @@ class PostService:
             "content_html": form_data["content_html"],
             "folder": folder.model_dump() if folder else folder
         }
-        result = self.post_repository.update(post_data, id=form_data["id"])
+        self.post_repository.update(post_data, id=post_id)
 
-        return str(result)
+        return post_id
 
     def get_post_by_id(self, post_id: str) -> Post:
         return self.post_repository.get(id=post_id)

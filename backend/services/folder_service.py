@@ -45,13 +45,18 @@ class FolderService:
         return str(result)
 
     def update_folder(self, form_data: dict) -> str:
+        folder_id = form_data["id"]
+
         folder_data = {
             "name": form_data.get("name"),
             "created_at": prosess_created_at(form_data.get("created_at")),
             "icon": form_data.get("icon"),
             "cover": form_data.get("cover"),
         }
+        self.folder_repository.update(folder_data, id=folder_id)
 
-        result = self.folder_repository.update(folder_data, id=form_data["id"])
+        folder_data["id"] = folder_id
+        params = {"folder.id": folder_id}
+        self.post_repository.update_many({"folder": folder_data}, **params)
 
-        return str(result)
+        return folder_id
