@@ -20,9 +20,9 @@ interface DeleteFolderProps {
 function DeleteFolder({ folderId, onDeleted  }: DeleteFolderProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  async function handleDeleteWithNotes() {
+  async function handleDeleteWithPosts() {
     try {
-      await fetch(`${siteConfig.backendDomain}/api/folder/with-notes/${folderId}`, {
+      await fetch(`${siteConfig.backendDomain}/api/folder/with-posts/${folderId}`, {
         method: "DELETE",
       });
 
@@ -33,9 +33,9 @@ function DeleteFolder({ folderId, onDeleted  }: DeleteFolderProps) {
     }
   }
 
-  async function handleDeleteSaveNotes() {
+  async function handleDeleteSavePosts() {
     try {
-      await fetch(`${siteConfig.backendDomain}/api/folder/save-notes/${folderId}`, {
+      await fetch(`${siteConfig.backendDomain}/api/folder/save-posts/${folderId}`, {
         method: "DELETE",
       });
 
@@ -80,7 +80,7 @@ function DeleteFolder({ folderId, onDeleted  }: DeleteFolderProps) {
             </Button>
 
             <Button
-              onPress={handleDeleteWithNotes}
+              onPress={handleDeleteWithPosts}
               radius="full"
               color="danger"
               className="shadow-lg tracking-widest px-6 text-sm"
@@ -89,7 +89,7 @@ function DeleteFolder({ folderId, onDeleted  }: DeleteFolderProps) {
             </Button>
 
             <Button
-              onPress={handleDeleteSaveNotes}
+              onPress={handleDeleteSavePosts}
               radius="full"
               color="danger"
               className="shadow-lg tracking-widest px-6 text-sm"
