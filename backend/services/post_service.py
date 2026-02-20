@@ -1,13 +1,13 @@
 from utils import prosess_created_at
 from models import Post, Folder
-from db import GenericRepository
+from db import GenericRepository, PostRepository
 
 
 class PostService:
 
     def __init__(
             self,
-            post_repository: GenericRepository[Post],
+            post_repository: PostRepository,
             folder_repository: GenericRepository[Folder]
     ):
         self.post_repository = post_repository

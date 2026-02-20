@@ -1,14 +1,14 @@
 from utils import prosess_created_at
-from models import Folder, Post
-from mongodb import GenericMongoRepository
+from models import Folder
+from db import GenericRepository, PostRepository
 
 
 class FolderService:
 
     def __init__(
             self,
-            folder_repository: GenericMongoRepository[Folder],
-            post_repository: GenericMongoRepository[Post]
+            folder_repository: GenericRepository[Folder],
+            post_repository: PostRepository
     ):
         self.folder_repository = folder_repository
         self.post_repository = post_repository
@@ -19,21 +19,17 @@ class FolderService:
     def get_folder_by_id(self, folder_id: str) -> Folder:
         return self.folder_repository.get(id=folder_id)
 
-    def delete_cascade(self, folder_id: str) -> int:
+    def delete_with_posts(self, folder_id: str) -> int:
         deleted_folders = self.folder_repository.delete(id=folder_id)
-
-        params = {"folder.id": folder_id}
-        deleted_posts = self.post_repository.delete_many(**params)
+        deleted_posts = self.post_repository.delete_by_folder(folder_id)
 
         return deleted_folders + deleted_posts
 
-    def delete_set_null(self, folder_id: str) -> int:
+    def delete_save_posts(self, folder_id: str) -> int:
         deleted_folders = self.folder_repository.delete(id=folder_id)
+        self.post_repository.detach_from_folder(folder_id)
 
-        params = {"folder.id": folder_id}
-        updated_posts = self.post_repository.update_many({"folder": None}, **params)
-
-        return deleted_folders + updated_posts
+        return deleted_folders
 
     def create_folder(self, form_data: dict) -> str:
         folder_data = {
