@@ -27,19 +27,19 @@ class PostMongoRepository:
         documents = [self.model_to_document(model) for model in models]
         return self._mongo_repository.add_many(documents)
 
-    def get(self, model_type: type[Post], **filter):
+    def get(self, **filter):
         document = self._mongo_repository.get(**filter)
         if document is None:
             raise ValueError('Document not found')
-        return model_type(**document)
+        return Post(**document)
 
-    def get_list(self, model_type: type[Post], **filter):
+    def get_list(self, **filter):
         documents = self._mongo_repository.get_list(**filter)
-        return list(map(lambda document: model_type(**document), documents))
+        return list(map(lambda document: Post(**document), documents))
 
-    def get_range(self, start: int, end: int, model_type: type[Post], **filter):
+    def get_range(self, start: int, end: int, **filter):
         documents = self._mongo_repository.get_range(start, end, **filter)
-        return list(map(lambda document: model_type(**document), documents))
+        return list(map(lambda document: Post(**document), documents))
 
     def count(self, **filter):
         return self._mongo_repository.count(**filter)
@@ -56,10 +56,10 @@ class PostMongoRepository:
     def delete_many(self, **filter):
         return self._mongo_repository.delete_many(**filter)
 
-    def find(self, model_type: type[Post], **filter):
+    def find(self, **filter):
         if not (document := self._mongo_repository.find(**filter)):
             return document
-        return model_type(**document)
+        return Post(**document)
 
     def delete_by_folder(self, folder_id: str) -> int:
         params = {"folder.id": folder_id}
