@@ -19,13 +19,13 @@ class PostMongoRepository:
         document['model'] = type(model).__name__
         return document
 
-    def add(self, model: Post):
+    def add(self, model: Post) -> str:
         document = self.model_to_document(model)
-        return self._mongo_repository.add(document)
+        return self._mongo_repository.add(document).inserted_id
 
     def add_many(self, models: Sequence[Post]):
         documents = [self.model_to_document(model) for model in models]
-        return self._mongo_repository.add_many(documents)
+        return self._mongo_repository.add_many(documents).inserted_ids
 
     def get(self, **filter):
         document = self._mongo_repository.get(**filter)
@@ -44,17 +44,17 @@ class PostMongoRepository:
     def count(self, **filter):
         return self._mongo_repository.count(**filter)
 
-    def update(self, update: dict, **filter):
-        return self._mongo_repository.update(update, **filter)
+    def update(self, update: dict, **filter) -> bool:
+        return self._mongo_repository.update(update, **filter).did_upsert
 
     def update_many(self, update: dict, **filter):
-        return self._mongo_repository.update_many(update, **filter)
+        return self._mongo_repository.update_many(update, **filter).modified_count
 
-    def delete(self, **filter):
-        return self._mongo_repository.delete(**filter)
+    def delete(self, **filter) -> int:
+        return self._mongo_repository.delete(**filter).deleted_count
 
     def delete_many(self, **filter):
-        return self._mongo_repository.delete_many(**filter)
+        return self._mongo_repository.delete_many(**filter).deleted_count
 
     def find(self, **filter):
         if not (document := self._mongo_repository.find(**filter)):
