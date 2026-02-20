@@ -1,7 +1,7 @@
-from dependencies.dependencies import PostRepositoryDependency
-from dependencies.dependencies import FolderRepositoryDependency
-from dependencies.dependencies import PostServiceDependency
-from dependencies.dependencies import FolderServiceDependency
+from dependencies.mongo_repositories import PostRepositoryDependency
+from dependencies.mongo_repositories import FolderRepositoryDependency
+from dependencies.services import PostServiceDependency
+from dependencies.services import FolderServiceDependency
 
 
 __all__ = [

@@ -1,0 +1,72 @@
+from typing import Sequence
+from models import Post
+from mongodb import DictMongoRepository
+
+
+class PostMongoRepository:
+
+    def __init__(
+        self,
+        connection_string: str,
+        database_name: str,
+        collection_name: str,
+        client_kwargs: dict | None = None
+    ):
+        self._mongo_repository = DictMongoRepository(connection_string, database_name, collection_name, client_kwargs)
+
+    def model_to_document(self, model: Post):
+        document = model.model_dump()
+        document['model'] = type(model).__name__
+        return document
+
+    def add(self, model: Post):
+        document = self.model_to_document(model)
+        return self._mongo_repository.add(document)
+
+    def add_many(self, models: Sequence[Post]):
+        documents = [self.model_to_document(model) for model in models]
+        return self._mongo_repository.add_many(documents)
+
+    def get(self, model_type: type[Post], **filter):
+        document = self._mongo_repository.get(**filter)
+        if document is None:
+            raise ValueError('Document not found')
+        return model_type(**document)
+
+    def get_list(self, model_type: type[Post], **filter):
+        documents = self._mongo_repository.get_list(**filter)
+        return list(map(lambda document: model_type(**document), documents))
+
+    def get_range(self, start: int, end: int, model_type: type[Post], **filter):
+        documents = self._mongo_repository.get_range(start, end, **filter)
+        return list(map(lambda document: model_type(**document), documents))
+
+    def count(self, **filter):
+        return self._mongo_repository.count(**filter)
+
+    def update(self, update: dict, **filter):
+        return self._mongo_repository.update(update, **filter)
+
+    def update_many(self, update: dict, **filter):
+        return self._mongo_repository.update_many(update, **filter)
+
+    def delete(self, **filter):
+        return self._mongo_repository.delete(**filter)
+
+    def delete_many(self, **filter):
+        return self._mongo_repository.delete_many(**filter)
+
+    def find(self, model_type: type[Post], **filter):
+        if not (document := self._mongo_repository.find(**filter)):
+            return document
+        return model_type(**document)
+
+    def delete_by_folder(self, folder_id: str) -> int:
+        params = {"folder.id": folder_id}
+        result = self._mongo_repository.delete_many(**params)
+        return result.deleted_count
+
+    def detach_from_folder(self, folder_id: str) -> int:
+        params = {"folder.id": folder_id}
+        result = self._mongo_repository.update_many({"folder": None}, **params)
+        return result.modified_count
